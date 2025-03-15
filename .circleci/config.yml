@@ -8,12 +8,12 @@ workflows:
           filters:
             branches:
               only: main  # Run CI only on the main branch
-      - deploy:
-          filters:
-            branches:
-              only: main
-          requires: 
-            - build # means if our build job does not pass our deploy job will not be run
+      # - deploy:
+      #     filters:
+      #       branches:
+      #         only: main
+      #     requires: 
+      #       - build # means if our build job does not pass our deploy job will not be run
 
 jobs:
   build:  # what happens in our build job
