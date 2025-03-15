@@ -1,0 +1,52 @@
+version: 2.1 # YAML 2.1
+
+workflows:
+  version: 2 # CircleCI 2
+  build:
+    jobs:
+      - build: # tasks we want CircleCI to execute (cont integr)
+          filters:
+            branches:
+              only: main  # Run CI only on the main branch
+      # - deploy:
+      #     filters:
+      #       branches:
+      #         only: main
+      #     requires: 
+      #       - build # means if our build job does not pass our deploy job will not be run
+
+jobs:
+  build:  # what happens in our build job
+    working_directory: ~/MyApp
+    docker:
+      - image: circleci/node:16  # version of node 
+    steps:
+      - checkout # first is the checkout the GitHub repository
+      - run:
+          name: Update npm # version of npm
+          command: 'npm install npm@8'  # Install locally without global update
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }} # install dependencies for node app to use
+      - run:
+          name: Install npm dependencies
+          command: npm install --unsafe-perm # Fix permission issue during install
+      # - run:
+      #     name: Run Tests # implement continuous testing in continuous integration pipeline
+      #     command: npm test          
+      - save_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+          paths:
+            - ./node_modules
+  # deploy:
+  #   docker:
+  #     - image: circleci/node:10.16.3
+  #   steps:
+  #      - run:
+  #         name: Deploy Application
+  #         command: |
+  #             ssh -o StrictHostKeyChecking=no -i ~/.ssh/devops-ec-access.pem $EC2_USERNAME@$EC2_PUBLIC_DNS "
+  #             export SERVER=\"$SERVER\";
+  #             export PRIVATE_KEY=\"$PRIVATE_KEY\";
+  #             rm -rf SimpleApplication/;
+  #             git clone https://github.com/ProjectPart1/SimpleApplication.git;
+  #             source SimpleApplication/deploy.sh"
