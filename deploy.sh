@@ -15,8 +15,8 @@ cd MyApp/
 # Install application dependencies
 npm install
 
-# echo $PRIVATE_KEY > privatekey.pem
-# echo $SERVER > server.crt
+echo $PRIVATE_KEY > privatekey.pem
+echo $SERVER > server.crt
 
 # Restart PM2 to apply changes
 pm2 start ./bin/www --name simpleApplication
