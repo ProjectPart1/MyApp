@@ -30,9 +30,9 @@ jobs:
       - run:
           name: Install npm dependencies
           command: npm install --unsafe-perm # Fix permission issue during install
-      # - run:
-      #     name: Run Tests # implement continuous testing in continuous integration pipeline
-      #     command: npm test          
+      - run:
+          name: Run Tests # implement continuous testing in continuous integration pipeline
+          command: npm test          
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
